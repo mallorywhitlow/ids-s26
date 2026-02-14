@@ -1,0 +1,76 @@
+---
+title: "Homework Assignment 2"
+author: "Mallory Whitlow"
+toc: true
+number-sections: true
+highlight-style: pygments
+format: 
+  html: 
+    code-fold: false
+    html-math-method: katex
+  pdf: 
+    geometry: 
+      - top=30mm
+      - left=20mm
+
+##  docx: Never, unless to accommodate a collaborator
+---
+
+## 6.2.1 Part 1. Contributing to Class Notes
+
+This section contains a guide on how to contribute to the class note repository.
+
+### Create a fork of the notes repository
+
+Creating a fork is essentially the same thing as copying a repository. We need to copy the repository so that the changes we make do not conflict with the original code.
+
+1.  In HuskyCT, click the "Homework Descriptions" link, which will take you to the `Homework` section in the class notes.
+2.  Go to the section called `Preliminaries` , then click the <https://github.com/statds/ids-s26> link to be taken to the Intro to Data Science Spring 2026 class notes on Github.
+3.  In the `code` tab, the fork button is on the top right corner of the screen. Click **Fork**-\> **Create Fork**
+4.  Once clicking **Fork**, you should arrive on a screen with the forked class notes repository.
+
+### Clone forked repository to computer
+
+Use the following code in the terminal to clone the forked repository to your computer. Make sure to replace Github_Username with your Github username.
+
+```{bash}
+cd ~/Documents/Github
+```
+
+I cloned the repository into the Github folder on my computer, so either replace "Github" with the folder you would like to clone to or skip this part and use the code below to clone.
+
+```{bash}
+git clone https://github.com/Github_Username/ids-s26.git
+```
+
+```{bash}
+cd ids-s26
+```
+
+### Render the class notes 
+
+First, we are going to create a virtual environment to work with this repository.
+
+```{bash}
+python -m venv hw2
+```
+
+```{bash}
+source hw2/bin/activate 
+```
+
+These commands create and open a folder within the class notes that runs the Python built-in virtual environment module. This gives us a clean environment so that we do not have to install packages globally and potentially mess with other coding projects.
+
+```{bash}
+pip install -r requirements.txt
+```
+
+This installs the required packages from the class notes.
+
+```{bash}
+quarto render
+```
+
+```{bash}
+quarto preview
+```
