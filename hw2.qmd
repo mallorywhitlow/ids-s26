@@ -13,8 +13,7 @@ format:
       - top=30mm
       - left=20mm
     execute:
-    python:
-    /Users/mallorywhitlow/Library/Caches/org.R-project.R/R/reticulate/uv/cache/archive-v0/4U3Top4DyZtpH6ks0kRRh/bin/python3
+    python: /Users/mallorywhitlow/Library/Caches/org.R-project.R/R/reticulate/uv/cache/archive-v0/4U3Top4DyZtpH6ks0kRRh/bin/python3
 
 ##  docx: Never, unless to accommodate a collaborator
 ---
@@ -189,7 +188,7 @@ Naive Recursion
 def seq_rs(n, c1, c2):
     if n == 1 or n == 2:
         return 1
-    return c1 * fib_rs(n-1) + c2 * fib_rs(n-2)
+    return c1 * seq_rs(n-1, c1, c2) + c2 * seq_rs(n-2, c1, c2)
 
 ```
 
@@ -269,7 +268,7 @@ def seq_dbu_m(n, c1, c2):
 
 ```{python}
 for f in [seq_rs, seq_dm, seq_dbu, seq_dbu_m]:
-    print(f.__name__, f(10, 2, 1))
+  print(f.__name__, f(10, 2, 1))
 ```
 
 ```{python}
