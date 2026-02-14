@@ -305,3 +305,110 @@ Naive recursion repeatedly computes the same values, causing the number of funct
 Memoization stores previously computed results and reuses them. This gets rid of repeated work, since each value is only computed once.
 
 The bottom up list method stores all computed values in a list, so it uses more memory as n increases. The constant memory version only keeps the last two values, so it uses much less memory.
+
+## **6.2.3 Part C. Fast method using matrices**
+
+```{python}
+# A 2x2 matrix is represented as:
+# [[a, b],
+#  [c, d]]
+
+def mat2_mul(A, B):
+    """Multiply two 2x2 matrices A and B."""
+    return [
+        [
+            A[0][0] * B[0][0] + A[0][1] * B[1][0],
+            A[0][0] * B[0][1] + A[0][1] * B[1][1],
+        ],
+        [
+            A[1][0] * B[0][0] + A[1][1] * B[1][0],
+            A[1][0] * B[0][1] + A[1][1] * B[1][1],
+        ],
+    ]
+
+def mat2_vec_mul(A, v):
+    """Multiply 2x2 matrix A by 2-vector v = [x, y]."""
+    return [
+        A[0][0] * v[0] + A[0][1] * v[1],
+        A[1][0] * v[0] + A[1][1] * v[1],
+    ]
+
+def mat2_pow(M, n):
+    """
+    Compute M^n for a 2x2 matrix M and integer n >= 0
+    using exponentiation by squaring.
+    """
+    if not isinstance(n, int) or n < 0:
+        raise ValueError("n must be an integer >= 0")
+
+    # Identity matrix I
+    result = [[1, 0],
+              [0, 1]]
+    base = M
+
+    while n > 0:
+        if n % 2 == 1:
+            result = mat2_mul(result, base)
+        base = mat2_mul(base, base)
+        n //= 2
+
+    return result
+
+
+# Quick sanity checks
+I = [[1, 0], [0, 1]]
+A = [[2, 3], [4, 5]]
+
+assert mat2_mul(I, A) == A
+assert mat2_mul(A, I) == A
+assert mat2_pow(A, 0) == I
+assert mat2_pow(A, 1) == A
+```
+
+```{python}
+def seq_log(n, c1, c2, a1=1, a2=1):
+    
+    if n == 1:
+        return a1
+    if n == 2:
+        return a2
+
+    M = [[c1, c2],
+         [1,  0]]
+
+    Mn = mat2_pow(M, n - 2)
+
+    result_vec = mat2_vec_mul(Mn, [a2, a1])
+
+    return result_vec[0]
+```
+
+```{python}
+seq_log(10, 2, 1)
+```
+
+```{python}
+import time
+def benchmark(n, c1=2, c2=1):
+    print(f"\nBenchmark n = {n}")
+    
+    start = time.perf_counter()
+    result1 = seq_dbu_m(n, c1, c2)
+    t1 = time.perf_counter() - start
+    print(f"seq_dbu_m: {t1:.6f} seconds")
+
+    start = time.perf_counter()
+    result2 = seq_log(n, c1, c2)
+    t2 = time.perf_counter() - start
+    print(f"seq_log:   {t2:.6f} seconds")
+
+    assert result1 == result2
+```
+
+```{python}
+benchmark(10**3)
+benchmark(10**4)
+benchmark(10**5)
+```
+
+The biggest takeaway for me is that algorithm choice matters a lot more than I originally thought. Even though all of the methods compute the same sequence, reducing the recurrence to matrix exponentiation changes the complexity from O(n) to O(log n). For large n values, this creates an extreme difference in performace, and puts into perspective how big of a role math plays in runtime efficiency.
